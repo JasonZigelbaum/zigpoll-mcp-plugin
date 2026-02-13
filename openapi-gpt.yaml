@@ -1,0 +1,609 @@
+openapi: 3.1.0
+info:
+  title: Zigpoll API
+  description: Analyze Zigpoll survey responses, track trends, and get AI-powered insights from your survey data.
+  version: 1.0.0
+servers:
+  - url: https://v1.zigpoll.com
+security:
+  - ApiKeyAuth: []
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  schemas:
+    Account:
+      type: object
+      properties:
+        _id:
+          type: string
+        createdAt:
+          type: string
+        title:
+          type: string
+        plan:
+          type: object
+          properties:
+            label:
+              type: string
+            key:
+              type: string
+            submissionLimit:
+              type: number
+            accountLimit:
+              type: number
+            emailLimit:
+              type: number
+            smsLimit:
+              type: number
+        owner:
+          type: string
+        admin:
+          type: array
+          items:
+            type: string
+        polls:
+          type: array
+          items:
+            type: string
+        lastModified:
+          type: string
+        submissionCount:
+          type: number
+        responseCount:
+          type: number
+        participantCount:
+          type: number
+        emailCount:
+          type: number
+        voteCount:
+          type: number
+    Poll:
+      type: object
+      properties:
+        _id:
+          type: string
+        createdAt:
+          type: string
+        title:
+          type: string
+        pageRules:
+          type: array
+          items:
+            type: string
+        accountId:
+          type: string
+        slides:
+          type: array
+          items:
+            type: string
+        lastModified:
+          type: string
+        renderCount:
+          type: number
+        presentationCount:
+          type: number
+        openCount:
+          type: number
+        engagementCount:
+          type: number
+        voteCount:
+          type: number
+        submissionCount:
+          type: number
+        participantCount:
+          type: number
+        responseCount:
+          type: number
+        completeCount:
+          type: number
+        closeCount:
+          type: number
+        emailCount:
+          type: number
+    Slide:
+      type: object
+      properties:
+        _id:
+          type: string
+        createdAt:
+          type: string
+        title:
+          type: string
+        handle:
+          type: string
+        answers:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              handle:
+                type: string
+              votes:
+                type: number
+        copy:
+          type: string
+        type:
+          type: string
+        optional:
+          type: boolean
+        pollId:
+          type: string
+        lastModified:
+          type: string
+        viewCount:
+          type: number
+        presentationCount:
+          type: number
+        engagementCount:
+          type: number
+    Response:
+      type: object
+      properties:
+        _id:
+          type: string
+        createdAt:
+          type: string
+        accountId:
+          type: string
+        pollId:
+          type: string
+        slideId:
+          type: string
+        participantId:
+          type: string
+        orderValue:
+          type: number
+        metadata:
+          type: object
+        response:
+          type: string
+        userAgent:
+          type: string
+        valueType:
+          type: string
+    Participant:
+      type: object
+      properties:
+        _id:
+          type: string
+        createdAt:
+          type: string
+        id:
+          type: string
+        ipAddress:
+          type: string
+        ipDetails:
+          type: object
+          properties:
+            ip:
+              type: string
+            continent_code:
+              type: string
+            country_code:
+              type: string
+            region_name:
+              type: string
+            city:
+              type: string
+            latitude:
+              type: string
+            longitude:
+              type: string
+        polls:
+          type: array
+          items:
+            type: string
+        responses:
+          type: array
+          items:
+            type: object
+            properties:
+              response:
+                type: string
+              pollId:
+                type: string
+              slideId:
+                type: string
+        slides:
+          type: array
+          items:
+            type: string
+        userAgent:
+          type: string
+        updatedAt:
+          type: string
+    Email:
+      type: object
+      properties:
+        _id:
+          type: string
+        createdAt:
+          type: string
+        email:
+          type: string
+        pollId:
+          type: string
+        slideId:
+          type: string
+        accountId:
+          type: string
+        participantId:
+          type: string
+    Insight:
+      type: object
+      properties:
+        _id:
+          type: string
+        slideId:
+          type: string
+        accountId:
+          type: string
+        pollId:
+          type: string
+        content:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              title:
+                type: string
+              description:
+                type: string
+paths:
+  /me:
+    get:
+      operationId: getMe
+      summary: Get the authenticated user
+      responses:
+        "200":
+          description: The current user object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  accounts:
+                    type: array
+                    items:
+                      type: string
+                  createdAt:
+                    type: string
+                  lastModified:
+                    type: string
+  /accounts:
+    get:
+      operationId: getAccounts
+      summary: Get all accounts for the authenticated user
+      responses:
+        "200":
+          description: Array of account objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Account"
+  /account:
+    get:
+      operationId: getAccount
+      summary: Get a specific account by ID
+      parameters:
+        - name: accountId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The account ID
+      responses:
+        "200":
+          description: An account object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+  /polls:
+    get:
+      operationId: getPolls
+      summary: Get all polls for an account
+      parameters:
+        - name: accountId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The account ID
+      responses:
+        "200":
+          description: Array of poll objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Poll"
+  /poll:
+    get:
+      operationId: getPoll
+      summary: Get a specific poll by ID
+      parameters:
+        - name: pollId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The poll ID
+      responses:
+        "200":
+          description: A poll object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Poll"
+  /slides:
+    get:
+      operationId: getSlides
+      summary: Get all slides (questions) for a poll
+      parameters:
+        - name: pollId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The poll ID
+      responses:
+        "200":
+          description: Array of slide objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Slide"
+  /slide:
+    get:
+      operationId: getSlide
+      summary: Get a specific slide (question) by ID
+      parameters:
+        - name: slideId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The slide ID
+      responses:
+        "200":
+          description: A slide object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Slide"
+  /responses:
+    get:
+      operationId: getResponses
+      summary: Get responses for a slide, poll, or account
+      parameters:
+        - name: accountId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by account ID
+        - name: pollId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by poll ID
+        - name: slideId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by slide ID
+        - name: startCursor
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Pagination cursor
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "50"
+          description: Number of results (max 1000)
+        - name: createdAfter
+          in: query
+          required: false
+          schema:
+            type: string
+          description: JS timestamp (e.g. Date.now()) to filter responses created after this time
+      responses:
+        "200":
+          description: Paginated response objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Response"
+                  hasNextPage:
+                    type: boolean
+                  endCursor:
+                    type: string
+  /participants:
+    get:
+      operationId: getParticipants
+      summary: Get participants for a slide, poll, or account
+      parameters:
+        - name: accountId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by account ID
+        - name: pollId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by poll ID
+        - name: slideId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by slide ID
+        - name: startCursor
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Pagination cursor
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "50"
+          description: Number of results (max 1000)
+      responses:
+        "200":
+          description: Paginated participant objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Participant"
+                  hasNextPage:
+                    type: boolean
+                  endCursor:
+                    type: string
+  /emails:
+    get:
+      operationId: getEmails
+      summary: Get collected emails for a slide, poll, or account
+      parameters:
+        - name: accountId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by account ID
+        - name: pollId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by poll ID
+        - name: slideId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by slide ID
+        - name: startCursor
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Pagination cursor
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "50"
+          description: Number of results (max 1000)
+      responses:
+        "200":
+          description: Paginated email objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Email"
+                  hasNextPage:
+                    type: boolean
+                  endCursor:
+                    type: string
+  /insights:
+    get:
+      operationId: getInsights
+      summary: Get AI-generated insights for a slide, poll, or account
+      parameters:
+        - name: accountId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by account ID
+        - name: pollId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by poll ID
+        - name: slideId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by slide ID
+        - name: startCursor
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Pagination cursor
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "50"
+          description: Number of results (max 1000)
+      responses:
+        "200":
+          description: Paginated insight objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Insight"
+                  hasNextPage:
+                    type: boolean
+                  endCursor:
+                    type: string

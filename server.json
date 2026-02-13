@@ -1,0 +1,17 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.zigpoll/zigpoll-mcp",
+  "title": "Zigpoll",
+  "description": "Analyze Zigpoll survey responses, track trends, and get AI-powered insights.",
+  "repository": {
+    "url": "https://github.com/JasonZigelbaum/zigpoll-mcp-plugin",
+    "source": "github"
+  },
+  "version": "2.0.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.zigpoll.com/mcp"
+    }
+  ]
+}
