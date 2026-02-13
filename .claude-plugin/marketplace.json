@@ -1,0 +1,23 @@
+{
+  "name": "zigpoll",
+  "owner": {
+    "name": "Zigpoll"
+  },
+  "metadata": {
+    "description": "Official Zigpoll plugins for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "zigpoll",
+      "source": ".",
+      "description": "Connect Claude to your Zigpoll surveys and polls. Analyze responses, track trends, compare poll performance, and get AI-powered insights from your survey data.",
+      "version": "2.0.0",
+      "author": {
+        "name": "Zigpoll"
+      },
+      "homepage": "https://www.zigpoll.com",
+      "keywords": ["zigpoll", "surveys", "polls", "analytics", "mcp"],
+      "category": "analytics"
+    }
+  ]
+}
