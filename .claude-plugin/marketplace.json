@@ -4,13 +4,13 @@
     "name": "Zigpoll"
   },
   "metadata": {
-    "description": "Official Zigpoll plugins for Claude Code"
+    "description": "Official Zigpoll plugin"
   },
   "plugins": [
     {
       "name": "zigpoll",
       "source": ".",
-      "description": "Connect Claude to your Zigpoll surveys and polls. Analyze responses, track trends, compare poll performance, and get AI-powered insights from your survey data.",
+      "description": "Connect to your Zigpoll surveys and polls. Analyze responses, track trends, compare poll performance, and get AI-powered insights from your survey data.",
       "version": "2.0.0",
       "author": {
         "name": "Zigpoll"
